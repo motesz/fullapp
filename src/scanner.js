@@ -24,7 +24,7 @@ const ScannerScreen = () => {
       }else{
         setBoxes([])
       }
-    }, 3000)
+    }, 5000) // 1000 is 1 seconds
     return () => clearInterval(interval)
   }, [detecting])
 
@@ -42,7 +42,7 @@ const ScannerScreen = () => {
 
   const handleSpeak = () => {
     Tts.speak(
-      outputValue,  
+      message,  
       {
         androidParams: {
           KEY_PARAM_VOLUME: 1,
@@ -63,17 +63,19 @@ const ScannerScreen = () => {
 
     const result = await postDetect(snapshot)
     const {predictions} = result
-    setBoxes(predictions)
-
-    let letters = ''
-    predictions.forEach(prediction => {
-      letters += prediction?.class || ''
-    })
-    setMessage(letters)
 
     console.log("Predictions:", predictions)
-    console.log("Message:", message)
-    
+
+    if(predictions.length > 0){
+
+      let letters = predictions.map((classes) => classes?.class).join("")
+      setMessage((prev) => `${prev}${letters}`)
+      setBoxes(predictions)
+
+      console.log("Letters:", letters)
+      console.log("Message:", message)
+    }
+
   }
 
   return (
@@ -92,8 +94,7 @@ const ScannerScreen = () => {
         onSpeak={handleSpeak} 
         onSwitch={handleSwitchCamera} 
       />
-      <BoundingBox boxes={ [{"class": "C", "class_id": 2, "confidence": 0.7007904052734375, "detection_id": "cd69b3e6-fda6-4f50-90e3-154433e69ec6", "height": 639, "width": 546, "x": 370, "y": 678.5}]} />
-      {/* <BoundingBox boxes={boxes} /> */}
+      <BoundingBox boxes={boxes} />
     </View>
   )
 }

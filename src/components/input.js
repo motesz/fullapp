@@ -28,11 +28,23 @@ const InputTypeAhead = ({value, setValue}) => {
 
   useEffect(() => {
     if(inputValue != ''){
-      fetchWords(inputValue)
+      getSuggestionsByInput(inputValue)
     }else if(inputValue == ''){
       setSuggestions([])
     }
   }, [inputValue])
+
+  useEffect(() => {
+    setInputValue(value)
+  }, [value])
+
+  const getSuggestionsByInput = async (val) => {
+    console.log("Got input value:", val)
+    console.log("Getting word suggestions...")
+    const res = await fetchWords(val)
+    setSuggestions(res)
+    setData(res)
+  }
 
   const onSelect = useCallback((index) => {
     setInputValue(data[index].title);
