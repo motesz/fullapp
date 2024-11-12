@@ -1,4 +1,9 @@
 {
   "name": "SignLinguaFinal",
-  "displayName": "SignLinguaFinal"
+  "displayName": "SignLinguaFinal",
+  "webAppBaseUrl": "https://navajowhite-porpoise-541325.hostingersite.com/scan.php",
+  "trainDataModelID": "pm2SITMZ3j",
+  "suggestionsApiUrl": "https://api.datamuse.com/sug",
+  "roboflowDetectionApiUrl": "https://detect.roboflow.com/newmodel-bbv0n/1",
+  "roboflowDetectionApiKey": "3iQpfaxq8Qx8uiNfK5D1"
 }
