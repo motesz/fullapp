@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useRef} from "react";
 import { View, Text, StyleSheet, Dimensions } from "react-native";
-import { Camera, useCameraDevice } from 'react-native-vision-camera';
+import { Camera, getCameraDevice } from 'react-native-vision-camera';
 import Tts from "react-native-tts";
 
 import InputTypeAhead from "./components/input";
@@ -12,8 +12,12 @@ import { postDetect } from "./utils/api";
 const ScannerScreen = () => {
   
   const cameraRef = useRef(null)
+  
+  const devices = Camera.getAvailableCameraDevices()
+  const [cameraDevice, setCameraDevice] = useState(getCameraDevice(devices, 'back'))
+  
   const [detecting, setDetecting] = useState(false)
-  const [cameraDevice, setCameraDevice] = useState(useCameraDevice('back'))
+
   const [boxes, setBoxes] = useState([])
   const [message, setMessage] = useState("")
 
@@ -29,7 +33,8 @@ const ScannerScreen = () => {
   }, [detecting])
 
   const handleSwitchCamera = () => {
-    setCameraDevice(cameraDevice == 'back' ? useCameraDevice('front') : useCameraDevice('back'))
+    const position = cameraDevice?.position == 'front' ? 'back' : 'front'
+    setCameraDevice(getCameraDevice(devices, position))
   }
 
   const handleStartStop = async () => {
@@ -62,16 +67,22 @@ const ScannerScreen = () => {
     console.log("detecting...")
 
     const result = await postDetect(snapshot)
-    const {predictions} = result
+    const {predictions} = result 
 
     console.log("Predictions:", predictions)
 
     if(predictions.length > 0){
 
-      let letters = predictions.map((classes) => classes?.class).join("")
-      setMessage((prev) => `${prev}${letters}`)
-      setBoxes(predictions)
+      const topPrediction = predictions.reduce((max, current) =>
+        current.confidence > max.confidence ? current : max
+      );
 
+      let letters = [topPrediction].map((classes) => classes?.class).join("")
+      setMessage((prev) => `${prev}${letters}`)
+      setBoxes([topPrediction])
+
+      
+    console.log("Top Prediction:", topPrediction)
       console.log("Letters:", letters)
       console.log("Message:", message)
     }
