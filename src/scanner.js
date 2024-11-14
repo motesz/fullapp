@@ -19,7 +19,7 @@ const ScannerScreen = () => {
   const [detecting, setDetecting] = useState(false)
 
   const [boxes, setBoxes] = useState([])
-  const [message, setMessage] = useState("")
+  const [message, setMessage] = useState("anthropology")
 
   useEffect(() => {
     const interval = setInterval(() => {
