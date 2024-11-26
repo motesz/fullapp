@@ -19,7 +19,7 @@ const ScannerScreen = () => {
   const [detecting, setDetecting] = useState(false)
 
   const [boxes, setBoxes] = useState([])
-  const [message, setMessage] = useState("anthropology")
+  const [message, setMessage] = useState([])
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -28,7 +28,7 @@ const ScannerScreen = () => {
       }else{
         setBoxes([])
       }
-    }, 5000) // 1000 is 1 seconds
+    }, 3000) // 1000 is 1 seconds
     return () => clearInterval(interval)
   }, [detecting])
 
