@@ -11,6 +11,13 @@ const HomeIcon = (props) => (
   />
 );
 
+const ConnectIcon = (props) => (
+  <Icon
+    {...props}
+    name='people-outline'
+  />
+);
+
 const ProfileIcon = (props) => (
   <Icon
     {...props}
@@ -87,6 +94,7 @@ const TutorBottomTabBar = ({ navigation, state }) => (
     onSelect={index => navigation.navigate(state.routeNames[index])}>
     <BottomNavigationTab title='SCAN' icon={CameraIcon} />
     <BottomNavigationTab title='HOME' icon={HomeIcon} />
+    <BottomNavigationTab title='STUDENTS' icon={ConnectIcon} />
     <BottomNavigationTab title='PROFILE' icon={ProfileIcon} />
   </BottomNavigation>
 );

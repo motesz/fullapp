@@ -19,6 +19,7 @@ import RegisterScreen from './src/register';
 //TUTOR SCREENS
 import TutorHomeScreen from './src/tutor/home';
 import TutorProfileScreen from './src/tutor/profile';
+import TutorConnectionScreen from './src/tutor/connection';
 
 //LEARNER SCREENS
 import LearnerHomeScreen from './src/learner/home';
@@ -35,6 +36,7 @@ const TutorTabs = () => {
     >
       <Tab.Screen name="Scan" options={{headerShown: false}} component={ScannerScreen} />
       <Tab.Screen name="Home" options={{headerShown: false}} component={TutorHomeScreen} />
+      <Tab.Screen name="Connections" options={{headerShown: false}} component={TutorConnectionScreen} />
       <Tab.Screen name="Profile" options={{headerShown: false}} component={TutorProfileScreen} />
     </Tab.Navigator>
   );
