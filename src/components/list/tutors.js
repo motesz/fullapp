@@ -2,29 +2,29 @@ import React, { useEffect, useState } from "react";
 import { FlatList, Image, View, StyleSheet } from "react-native";
 import { Text, List, ListItem, Icon, Button, Input } from "@ui-kitten/components";
 
-const ListTutors = ({payload}) => {
+const ListTutors = ({payload, accessoryRight = false, onPressAccessoryRight}) => {
 
   const [data, setData] = useState([
-      {name: 'Juan dela Cruz', age: 20, address: 'Lingayan Pangasinan'},
-      {name: 'Juan dela Cruz', age: 20, address: 'Lingayan Pangasinan'},
-      {name: 'Juan dela Cruz', age: 20, address: 'Lingayan Pangasinan'},
-      {name: 'Juan dela Cruz', age: 20, address: 'Lingayan Pangasinan'},
-      {name: 'Juan dela Cruz', age: 20, address: 'Lingayan Pangasinan'}
+    {name: 'Juan dela Cruz', age: 20, address: 'Lingayan Pangasinan'},
+    {name: 'Juan dela Cruz', age: 20, address: 'Lingayan Pangasinan'},
+    {name: 'Juan dela Cruz', age: 20, address: 'Lingayan Pangasinan'},
+    {name: 'Juan dela Cruz', age: 20, address: 'Lingayan Pangasinan'},
+    {name: 'Juan dela Cruz', age: 20, address: 'Lingayan Pangasinan'}
   ])
 
   useEffect(() => {
-      if(payload) setData(payload)
+    if(payload) setData(payload)
   }, [payload])
   
-  const renderItemAccessory = () => (
-      <Button size='tiny'>FOLLOW</Button>
+  const renderItemAccessory = ({data}) => (
+    <Button onPress={() => onPressAccessoryRight ? onPressAccessoryRight(data) : null} size='tiny'>VIEW PROFILE</Button>
   )
   
   const renderItemIcon = (props) => (
-      <Icon
-        {...props}
-        name='person'
-      />
+    <Icon
+      {...props}
+      name='person'
+    />
   )
   
   const renderItem = ({ item, index }) => (
@@ -32,9 +32,28 @@ const ListTutors = ({payload}) => {
           title={`${item.name}`}
           description={`${item.address} ${index + 1}`}
           accessoryLeft={renderItemIcon}
-          // accessoryRight={renderItemAccessory}
       />
   );
+
+  const renderItemWithRightOptions = ({ item, index }) => (
+    <ListItem
+      title={`${item.name}`}
+      description={`${item.address} ${index + 1}`}
+      accessoryLeft={renderItemIcon}
+      accessoryRight={() => renderItemAccessory({data: item})}
+    />
+  );
+
+  if(accessoryRight === true){
+    return (
+      <List
+        style={styles.container}
+        data={data}
+        renderItem={renderItemWithRightOptions}
+        maxToRenderPerBatch={10}
+      />
+  );
+  }
 
   return (
       <List

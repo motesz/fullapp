@@ -41,7 +41,7 @@ const LoginScreen = () => {
         console.log(username, password)
         if(username == "test" && password == "12345"){
             let user = await SESSION.set("user", {
-                user_type: 1,
+                user_type: 2,
                 email: username,
                 name: "Sample User",
                 password                

@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { View, TouchableWithoutFeedback, ScrollView } from "react-native";
+import { View, TouchableWithoutFeedback, ScrollView, StyleSheet } from "react-native";
 import { IndexPath, Text } from "@ui-kitten/components";
 import { useNavigation } from "@react-navigation/native";
 import { Button, Input, Icon, Select, SelectItem, Spinner } from '@ui-kitten/components';
-import { pick } from "react-native-document-picker";
+
+import ProfilePhoto from "../profilePhoto";
 import PasswordInput from "../passwordInput";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 const GENDERS = ["Male", "Female"]
 
-const TutorRegisterForm = ({onSubmit}) => {
+const LearnerUpdateForm = ({onSubmit}) => {
 
     const navigation = useNavigation()
 
@@ -24,22 +26,13 @@ const TutorRegisterForm = ({onSubmit}) => {
     const [userType, setUserType] = useState('')
 
     const [resume, setResume] = useState(null)
+    const [profilePhoto, setProfilePhoto] = useState(null)
+
     const [resumeUploading, setResumeUploading] = useState(false)
+    const [profilePhotoUploading, setProfilePhotoUploading] = useState(false)
 
+    const [secureTextEntry, setSecureTextEntry] = useState(true)
     const [error, setError] = useState(false)
-
-    const handlePickFile = async () => {
-        try {
-            setResumeUploading(true)
-            const [pickResult] = await pick()
-            console.log(pickResult)
-            setResume(pickResult)
-            setResumeUploading(false)
-        } catch (err) {
-            console.log(err)
-            setResumeUploading(false)
-        }
-    }
 
     const handleSubmit = () => {
         onSubmit({
@@ -56,10 +49,11 @@ const TutorRegisterForm = ({onSubmit}) => {
     }
 
     return (
-        <ScrollView contentContainerStyle={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-            <View style={{height: 40}}></View>
-            <Text style="">Sign Up as Tutor</Text>
-            <View style={{height: 40}}></View>
+        <SafeAreaProvider>
+        <SafeAreaView style={{flex: 1}}>
+        <ScrollView contentContainerStyle={{flex: 1, alignItems: 'center', justifyContent: 'flex-start'}}>
+            
+            <ProfilePhoto photo={profilePhoto} setPhoto={setProfilePhoto} />
             <Input
                 placeholder='First Name'
                 value={fname}
@@ -130,40 +124,19 @@ const TutorRegisterForm = ({onSubmit}) => {
             />
             <PasswordInput value={password} setValue={setPassword} />
             <View style={{height: 10}} />
-            
-            <View style={{
-                flex: 1, 
-                position: 'relative', 
-                alignItems: 'flex-start', 
-                justifyContent: 'flex-start', 
-                alignContent: 'flex-start', 
-                alignSelf: 'flex-start',
-                paddingHorizontal: 16, 
-                paddingVertical: 0
-            }}>
-                <Text>Resume</Text>
-                <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-                    <Button onPress={handlePickFile} appearance="outline">{ "Upload File" }</Button>
-                    <Text style={{flexWrap: 'no-wrap'}}> &nbsp;&nbsp;
-                        {resume == null ? "No File Chosen" : 
-                            resume?.name ? resume?.name.slice(0, 30) + '...' : '' || ''}
-                    </Text>
-                </View>
-            </View>
-
+        
             {error && <View style={{height: 0}}>
                 <Text>Invalid username or password</Text>
             </View>}
             <Button onPress={() => handleSubmit()} style={{paddingVertical: 16, marginTop: 8, width: '50%'}}>
-                SIGN UP
-            </Button>
-            <View style={{marginTop: 16, paddingVertical: 8}}><Text>Already have an account?</Text></View>
-            <Button size="small" appearance="outline" onPress={() => navigation.navigate("Login")} style={{paddingVertical: 16, width: '50%'}}>
-                SIGN IN
+                SAVE
             </Button>
             <View style={{height: 20}}></View>
         </ScrollView>
+        </SafeAreaView>
+        </SafeAreaProvider>
     )
 }
 
-export default TutorRegisterForm;
+
+export default LearnerUpdateForm;

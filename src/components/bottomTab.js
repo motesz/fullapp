@@ -99,6 +99,18 @@ const TutorBottomTabBar = ({ navigation, state }) => (
   </BottomNavigation>
 );
 
+const LearnerBottomTabBar = ({ navigation, state }) => (
+  <BottomNavigation
+    selectedIndex={state.index}
+    onSelect={index => navigation.navigate(state.routeNames[index])}>
+    <BottomNavigationTab title='SCAN' icon={CameraIcon} />
+    <BottomNavigationTab title='HOME' icon={HomeIcon} />
+    <BottomNavigationTab title='TUTORS' icon={ConnectIcon} />
+    <BottomNavigationTab title='PROFILE' icon={ProfileIcon} />
+  </BottomNavigation>
+);
+
 export {
-  TutorBottomTabBar
+  TutorBottomTabBar,
+  LearnerBottomTabBar
 };

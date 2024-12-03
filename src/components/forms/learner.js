@@ -3,6 +3,7 @@ import { View, TouchableWithoutFeedback } from "react-native";
 import { IndexPath, Text } from "@ui-kitten/components";
 import { useNavigation } from "@react-navigation/native";
 import { Button, Input, Icon, Select, SelectItem } from '@ui-kitten/components';
+import PasswordInput from "../passwordInput";
 
 const GENDERS = ["Male", "Female"]
 
@@ -21,21 +22,7 @@ const LearnerRegisterForm = ({onSubmit}) => {
     const [address, setAddress] = useState('')
     const [userType, setUserType] = useState('')
 
-    const [secureTextEntry, setSecureTextEntry] = useState(true)
     const [error, setError] = useState(false)
-
-    const toggleSecureEntry = () => {
-        setSecureTextEntry(!secureTextEntry);
-    };
-    
-    const renderEyeIcon = (props) => (
-        <TouchableWithoutFeedback onPress={toggleSecureEntry}>
-          <Icon
-            {...props}
-            name={secureTextEntry ? 'eye-off' : 'eye'}
-          />
-        </TouchableWithoutFeedback>
-    );
 
     const handleSubmit = () => {
         onSubmit({
@@ -122,17 +109,7 @@ const LearnerRegisterForm = ({onSubmit}) => {
                 }}
                 style={{paddingHorizontal: 16, paddingVertical: 4}}
             />
-            <Input
-                placeholder='Password'
-                value={password}
-                accessoryRight={renderEyeIcon}
-                secureTextEntry={secureTextEntry}
-                onChangeText={nextValue => {
-                    setPassword(nextValue)
-                    setError(false)
-                }}
-                style={{paddingHorizontal: 16, paddingVertical: 8}}
-            />
+            <PasswordInput value={password} setValue={setPassword} />
             {error && <View style={{height: 20}}>
                 <Text>Invalid username or password</Text>
             </View>}

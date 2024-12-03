@@ -9,7 +9,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 
 //TAB BARS
-import { TutorBottomTabBar } from './src/components/bottomTab';
+import { TutorBottomTabBar, LearnerBottomTabBar } from './src/components/bottomTab';
 
 // GLOBAL SCREENS
 import ScannerScreen from './src/scanner';
@@ -24,6 +24,7 @@ import TutorConnectionScreen from './src/tutor/connection';
 //LEARNER SCREENS
 import LearnerHomeScreen from './src/learner/home';
 import LearnerProfileScreen from './src/learner/profile';
+import LearnerConnectionScreen from './src/learner/connection';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -44,9 +45,10 @@ const TutorTabs = () => {
 
 const LearnerTabs = () => {
   return (
-    <Tab.Navigator initialRouteName='Home'>
+    <Tab.Navigator initialRouteName='Home' tabBar={(props) => <LearnerBottomTabBar {...props} />}>
       <Tab.Screen name="Scan" options={{headerShown: false}} component={ScannerScreen} />
       <Tab.Screen name="Home" options={{headerShown: false}} component={LearnerHomeScreen} />
+      <Tab.Screen name="Connections" options={{headerShown: false}} component={LearnerConnectionScreen} />
       <Tab.Screen name="Profile" options={{headerShown: false}} component={LearnerProfileScreen} />
     </Tab.Navigator>
   );

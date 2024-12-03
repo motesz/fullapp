@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { View, TouchableWithoutFeedback, ScrollView, TouchableOpacity, ImageBackground, Image } from "react-native";
+import { View, TouchableWithoutFeedback, ScrollView, StyleSheet } from "react-native";
 import { IndexPath, Text } from "@ui-kitten/components";
 import { useNavigation } from "@react-navigation/native";
 import { Button, Input, Icon, Select, SelectItem, Spinner } from '@ui-kitten/components';
-import { pick } from "react-native-document-picker";
+
+import ProfilePhoto from "../profilePhoto";
+import PasswordInput from "../passwordInput";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 const GENDERS = ["Male", "Female"]
-const defaultProfilePhoto = require("../../assets/images/default-avatar.jpg")
 
 const TutorUpdateForm = ({onSubmit}) => {
 
@@ -32,32 +34,6 @@ const TutorUpdateForm = ({onSubmit}) => {
     const [secureTextEntry, setSecureTextEntry] = useState(true)
     const [error, setError] = useState(false)
 
-    const toggleSecureEntry = () => {
-        setSecureTextEntry(!secureTextEntry);
-    };
-    
-    const renderEyeIcon = (props) => (
-        <TouchableWithoutFeedback onPress={toggleSecureEntry}>
-          <Icon
-            {...props}
-            name={secureTextEntry ? 'eye-off' : 'eye'}
-          />
-        </TouchableWithoutFeedback>
-    );
-
-    const onSelectProfilePhoto = async () => {
-        try {
-            setProfilePhotoUploading(true)
-            const [pickResult] = await pick()
-            console.log(pickResult)
-            setProfilePhoto(pickResult)
-            setProfilePhotoUploading(false)
-        } catch (err) {
-            console.log(err)
-            setProfilePhotoUploading(false)
-        }
-    }
-
     const handleSubmit = () => {
         onSubmit({
             fname,
@@ -73,21 +49,11 @@ const TutorUpdateForm = ({onSubmit}) => {
     }
 
     return (
+        <SafeAreaProvider>
+        <SafeAreaView style={{flex: 1}}>
         <ScrollView contentContainerStyle={{flex: 1, alignItems: 'center', justifyContent: 'flex-start'}}>
-            <View style={{marginBottom: 25, marginTop: 20}}>
-                <TouchableOpacity onPress={onSelectProfilePhoto} style={{width: 90, height: 90, borderRadius: 45}}>
-                    <Image source={profilePhoto != null ? profilePhoto?.uri : defaultProfilePhoto}                        
-                        style={{
-                            width: 90,
-                            height: 90,
-                            borderRadius: 45
-                        }}
-                    />
-                    <View style={{alignItems: 'center', justifyContent: 'flex-end'}}>
-                        <Text style={{fontSize: 10}}>Upload Photo</Text>
-                    </View>
-                </TouchableOpacity>
-            </View>
+            
+            <ProfilePhoto photo={profilePhoto} setPhoto={setProfilePhoto} />
             <Input
                 placeholder='First Name'
                 value={fname}
@@ -156,17 +122,7 @@ const TutorUpdateForm = ({onSubmit}) => {
                 }}
                 style={{paddingHorizontal: 16, paddingVertical: 4}}
             />
-            <Input
-                placeholder='Password'
-                value={password}
-                accessoryRight={renderEyeIcon}
-                secureTextEntry={secureTextEntry}
-                onChangeText={nextValue => {
-                    setPassword(nextValue)
-                    setError(false)
-                }}
-                style={{paddingHorizontal: 16, paddingVertical: 8}}
-            />
+            <PasswordInput value={password} setValue={setPassword} />
             <View style={{height: 10}} />
         
             {error && <View style={{height: 0}}>
@@ -177,7 +133,10 @@ const TutorUpdateForm = ({onSubmit}) => {
             </Button>
             <View style={{height: 20}}></View>
         </ScrollView>
+        </SafeAreaView>
+        </SafeAreaProvider>
     )
 }
+
 
 export default TutorUpdateForm;

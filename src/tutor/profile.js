@@ -1,16 +1,23 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { Text, Button, Icon, Divider } from "@ui-kitten/components";
 import { TouchableOpacity, View } from "react-native";
 import SESSION from "../utils/session";
 import { useNavigation } from "@react-navigation/native";
+
 import TutorUpdateForm from "../components/forms/updatetutor";
+import PendingApplicationPage from "../components/pendingApplication";
 
 const TutorProfileScreen = () => {
 
     const navigation = useNavigation();
+    const [accountStatus, setAccountStatus] = useState('active')
 
     const handleLogout = async () => {
         await SESSION.logout("user", navigation)
+    }
+
+    if(accountStatus == 'pending') {
+        return <PendingApplicationPage />
     }
 
     return (
