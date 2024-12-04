@@ -1,7 +1,12 @@
-import axios from "axios";
+import axios, { Axios } from "axios";
 import { readFile } from "react-native-fs";
 
-import {suggestionsApiUrl, roboflowDetectionApiUrl, roboflowDetectionApiKey} from '../../app.json';
+import {
+  suggestionsApiUrl, 
+  roboflowDetectionApiUrl, 
+  roboflowDetectionApiKey,
+  webApiUrl
+} from '../../app.json';
 
 export const postDetect = async (snap, callback, onError) => {
 
@@ -61,4 +66,43 @@ export const fetchWords = async (input) => {
     }
   });
   return formatted
+}
+
+export const PostApiCall = async (url, payload) => {
+
+  const res = await axios.postForm(webApiUrl + url, payload)
+  // console.log(res.data)
+  if(res?.data) return res?.data
+
+  return null
+}
+
+export const GetApiCall = async (url) => {
+  const res = await axios.get(webApiUrl + url, {})
+  console.log(res.data)
+  if(res?.data) return res?.data
+
+  return null
+}
+
+export const PostFormApiCall = async (url, payload, files = []) => {
+  var data = new FormData();
+
+  files.forEach((file) => {
+    data.append(file.name,file.data);
+  })
+  
+  Object.keys(payload).forEach((key) => {
+    data.append(key, payload[key])
+  })
+
+  console.log("PAYLOAD: ", data)
+
+  const res = await axios.post(webApiUrl + url, data, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  })
+
+  console.log("RESULT: ", res?.data)
 }

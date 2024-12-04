@@ -5,11 +5,26 @@ import { useNavigation } from "@react-navigation/native";
 
 import SESSION from "../utils/session";
 import LearnerUpdateForm from "../components/forms/updatelearner";
+import HELPERS from "../utils/helpers";
+import { PostFormApiCall } from "../utils/api";
 
 
 const LearnerProfileScreen = () => {
 
     const navigation = useNavigation();
+    const [profileData, setProfileData] = useState(null)
+
+    useEffect(() => {
+        HELPERS.getLearnerAccountData(setProfileData)
+    }, [])
+
+    const handleSubmit = async (payload, files) => {
+        console.log(payload)
+        let result = await PostFormApiCall('/profile.php', payload, files)
+        if(result?.status == 200){
+            HELPERS.getLearnerAccountData(setProfileData)
+        }
+    }
 
     const handleLogout = async () => {
         await SESSION.logout("user", navigation)
@@ -32,7 +47,10 @@ const LearnerProfileScreen = () => {
             </View>
             <Divider />
 
-            <LearnerUpdateForm />
+            <LearnerUpdateForm 
+                data={profileData} 
+                onSubmit={handleSubmit}
+            />
             
         </View>
     )

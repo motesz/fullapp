@@ -4,7 +4,10 @@ import { Text } from "@ui-kitten/components";
 import { useNavigation } from "@react-navigation/native";
 import { Button, Input, Icon } from '@ui-kitten/components';
 
+import PasswordInput from "./components/passwordInput";
+
 import SESSION from "./utils/session";
+import { PostApiCall } from "./utils/api";
 
 const LoginScreen = () => {
 
@@ -13,7 +16,6 @@ const LoginScreen = () => {
 
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
-    const [secureTextEntry, setSecureTextEntry] = useState(true)
     const [error, setError] = useState(false)
 
     useEffect(() => {
@@ -38,39 +40,21 @@ const LoginScreen = () => {
     }
 
     const handleSubmit = async () => {
-        console.log(username, password)
-        if(username == "test" && password == "12345"){
-            let user = await SESSION.set("user", {
-                user_type: 2,
-                email: username,
-                name: "Sample User",
-                password                
-            })
-            if(user){
-                console.log(user)
-                if(user?.user_type == 1){
-                    navigation.navigate("Tutor")
-                }else if(user?.user_type == 2){
-                    navigation.navigate("Learner")
+       
+        const result = await PostApiCall('/login.php', {username, password})
+        if(result.status == 500){
+            setError(true)
+        }else{
+            if(result?.data){
+                let user = await SESSION.set("user", result?.data)
+                if(user){
+                    console.log(user)
+                    if(user?.user_type == 1) navigation.navigate("Tutor")
+                    else if(user?.user_type == 2) navigation.navigate("Learner")
                 }
             }
-        }else{
-            setError(true)
         }
     }
-
-    const toggleSecureEntry = () => {
-        setSecureTextEntry(!secureTextEntry);
-    };
-    
-    const renderEyeIcon = (props) => (
-        <TouchableWithoutFeedback onPress={toggleSecureEntry}>
-          <Icon
-            {...props}
-            name={secureTextEntry ? 'eye-off' : 'eye'}
-          />
-        </TouchableWithoutFeedback>
-    );
 
     return (
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
@@ -85,17 +69,7 @@ const LoginScreen = () => {
                 }}
                 style={{paddingHorizontal: 16, paddingVertical: 0}}
             />
-            <Input
-                placeholder='Password'
-                value={password}
-                accessoryRight={renderEyeIcon}
-                secureTextEntry={secureTextEntry}
-                onChangeText={nextValue => {
-                    setPassword(nextValue)
-                    setError(false)
-                }}
-                style={{paddingHorizontal: 16, paddingVertical: 0}}
-            />
+            <PasswordInput value={password} setValue={setPassword} />
             {error && <View style={{height: 20}}>
                 <Text>Invalid username or password</Text>
             </View>}

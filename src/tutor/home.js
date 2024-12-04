@@ -1,15 +1,26 @@
 import React, { useEffect, useState } from "react";
 import { FlatList, Image, View, StyleSheet } from "react-native";
 import { Text, List, ListItem, Icon, Button, Input } from "@ui-kitten/components";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
 import SearchBar from "../components/search";
 import PendingApplicationPage from "../components/pendingApplication";
 import ListLearners from "../components/list/learners";
 import ListTutors from "../components/list/tutors";
 
+import { GetApiCall } from "../utils/api";
+import SESSION from "../utils/session";
+import HELPERS from "../utils/helpers";
+
 const TutorHomeScreen = () => {
 
-    const [accountStatus, setAccountStatus] = useState('active')
+    const [accountStatus, setAccountStatus] = useState('')
+    const [tutors, setTutors] = useState([])
+
+    useEffect(() => {
+        HELPERS.getAccountStatus(setAccountStatus)      
+        HELPERS.getListOfTutors(setTutors)  
+    }, [])
 
     if(accountStatus == 'pending') {
         return <PendingApplicationPage />
@@ -27,7 +38,7 @@ const TutorHomeScreen = () => {
                     </View>
                     <Image source={require("../assets/images/teacher.png")} style={{width: 150, height: 75, resizeMode: 'contain'}} />                    
                 </View>
-                <ListTutors />
+                <ListTutors payload={tutors} />
             </View>
 
         </View>

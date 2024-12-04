@@ -12,3 +12,17 @@ Build APK:
 Uploading APK (via web url)
  Link: https://installonair.com/
  
+
+Access Web Admin
+ Login to gmail, skyarias account
+ Go to hostinger.ph
+ Login with gmail (skyarias account)
+
+Access Web Admin Code
+ In hostinger.ph dashboard, look for File Management
+
+Access Web Admin Database
+ In hostinger.ph dashboard, look for Databases
+ 
+Web Admin Link:
+ https://darkseagreen-nightingale-164077.hostingersite.com/admin/

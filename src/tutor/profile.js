@@ -2,15 +2,31 @@ import React, {useState, useEffect} from "react";
 import { Text, Button, Icon, Divider } from "@ui-kitten/components";
 import { TouchableOpacity, View } from "react-native";
 import SESSION from "../utils/session";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
 import TutorUpdateForm from "../components/forms/updatetutor";
 import PendingApplicationPage from "../components/pendingApplication";
+import HELPERS from "../utils/helpers";
+import { PostApiCall, PostFormApiCall } from "../utils/api";
 
 const TutorProfileScreen = () => {
 
     const navigation = useNavigation();
     const [accountStatus, setAccountStatus] = useState('active')
+    const [profileData, setProfileData] = useState(null)
+
+    useEffect(() => {
+        HELPERS.getAccountStatus(setAccountStatus)
+        HELPERS.getAccountData(setProfileData)
+    }, [])
+
+    const handleSubmit = async (payload, files) => {
+        console.log(payload)
+        let result = await PostFormApiCall('/profile.php', payload, files)
+        if(result?.status == 200){
+            HELPERS.getAccountData(setProfileData)
+        }
+    }
 
     const handleLogout = async () => {
         await SESSION.logout("user", navigation)
@@ -37,7 +53,10 @@ const TutorProfileScreen = () => {
             </View>
             <Divider />
 
-            <TutorUpdateForm />
+            <TutorUpdateForm 
+                data={profileData} 
+                onSubmit={handleSubmit}
+            />
             
         </View>
     )

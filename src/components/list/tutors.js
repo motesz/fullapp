@@ -4,16 +4,11 @@ import { Text, List, ListItem, Icon, Button, Input } from "@ui-kitten/components
 
 const ListTutors = ({payload, accessoryRight = false, onPressAccessoryRight}) => {
 
-  const [data, setData] = useState([
-    {name: 'Juan dela Cruz', age: 20, address: 'Lingayan Pangasinan'},
-    {name: 'Juan dela Cruz', age: 20, address: 'Lingayan Pangasinan'},
-    {name: 'Juan dela Cruz', age: 20, address: 'Lingayan Pangasinan'},
-    {name: 'Juan dela Cruz', age: 20, address: 'Lingayan Pangasinan'},
-    {name: 'Juan dela Cruz', age: 20, address: 'Lingayan Pangasinan'}
-  ])
+  const [data, setData] = useState([])
 
   useEffect(() => {
     if(payload) setData(payload)
+      console.log(payload)
   }, [payload])
   
   const renderItemAccessory = ({data}) => (
@@ -29,7 +24,7 @@ const ListTutors = ({payload, accessoryRight = false, onPressAccessoryRight}) =>
   
   const renderItem = ({ item, index }) => (
       <ListItem
-          title={`${item.name}`}
+          title={`${item.firstname} ${item.lastname}`}
           description={`${item.address} ${index + 1}`}
           accessoryLeft={renderItemIcon}
       />
@@ -37,7 +32,7 @@ const ListTutors = ({payload, accessoryRight = false, onPressAccessoryRight}) =>
 
   const renderItemWithRightOptions = ({ item, index }) => (
     <ListItem
-      title={`${item.name}`}
+      title={`${item.firstname} ${item.lastname}`}
       description={`${item.address} ${index + 1}`}
       accessoryLeft={renderItemIcon}
       accessoryRight={() => renderItemAccessory({data: item})}

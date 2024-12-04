@@ -10,7 +10,7 @@ import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 const GENDERS = ["Male", "Female"]
 
-const LearnerUpdateForm = ({onSubmit}) => {
+const LearnerUpdateForm = ({data, onSubmit}) => {
 
     const navigation = useNavigation()
 
@@ -34,18 +34,37 @@ const LearnerUpdateForm = ({onSubmit}) => {
     const [secureTextEntry, setSecureTextEntry] = useState(true)
     const [error, setError] = useState(false)
 
+    useEffect(() => {
+        setFname(data?.firstname)
+        setLname(data?.lastname)
+        setEmail(data?.email)
+        setPassword(data?.password)
+        setAge(data?.age)
+        setGender(data?.gender)
+        setContact(data?.contact)
+        setAddress(data?.address)
+        setProfilePhoto(data?.profile_photo)
+    }, [data])
+
     const handleSubmit = () => {
-        onSubmit({
-            fname,
-            lname,
+        let payload = {
+            id: data?.id,            
+            firstname: fname,
+            lastname: lname,
             email,
             password,
             age,
             gender,
             address,
             contact,
-            resume
-        })
+        }
+        let files = [
+            {
+                name: 'profile_photo',
+                data: profilePhoto
+            }
+        ]
+        onSubmit(payload, files)
     }
 
     return (

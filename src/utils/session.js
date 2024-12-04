@@ -27,6 +27,14 @@ const get_current_user = async (key, navigation) => {
   }
 }
 
+const get_current_user_id = async (key) => {
+  let user = await localDB.get(key)
+  if(user){
+    return user
+  }
+  return null
+}
+
 const logout = async (key, navigation) => {
   await localDB.remove(key)
   navigation.dispatch(
@@ -43,6 +51,7 @@ const SESSION = {
   get,
   set,
   get_current_user,
+  get_current_user_id,
   logout
 }
 
