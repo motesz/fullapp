@@ -1,5 +1,6 @@
 import { GetApiCall, PostApiCall } from "./api"
 import SESSION from "./session"
+import {webBaseUrl} from '../../app.json'
 
 const getAccountStatus = async (setStatus) => {
   let user = await SESSION.get_current_user_id("user")
@@ -52,12 +53,50 @@ const getTutors = async (setData) => {
   }
 }
 
+const getTutorsExceptHired = async (setData) => {
+  let user = await SESSION.get_current_user_id("user")
+  if(user){
+    let result = await GetApiCall('/tutor.php?except=1&learner_id=' + user.id)
+    if(result?.status == 200){
+      setData(result?.data)
+    }
+  }
+}
+
+const getLearnerConnections = async (setData) => {
+  let user = await SESSION.get_current_user_id("user")
+  if(user){
+    let result = await GetApiCall('/connections.php?learner_id=' + user?.id)
+    if(result?.status == 200){
+      setData(result?.data)
+    }
+  }
+}
+
+const getTutorConnections = async (setData) => {
+  let user = await SESSION.get_current_user_id("user")
+  if(user){
+    let result = await GetApiCall('/connections.php?tutor_id=' + user?.id)
+    if(result?.status == 200){
+      setData(result?.data)
+    }
+  }
+}
+
+const getUploadedFile = (input) => {
+  return `${webBaseUrl}${input.replace("../", "")}`
+}
+
 const HELPERS = {
   getAccountStatus,
   getAccountData,
   getListOfTutors,
   getTutors,
-  getLearnerAccountData
+  getTutorsExceptHired,
+  getLearnerAccountData,
+  getLearnerConnections,
+  getTutorConnections,
+  getUploadedFile
 }
 
 export default HELPERS;

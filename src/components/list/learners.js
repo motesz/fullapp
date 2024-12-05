@@ -17,23 +17,24 @@ const ListLearners = ({payload, customMaxHeight}) => {
   }, [customMaxHeight])
   
   const renderItemAccessory = () => (
-      <Button size='tiny'>CONTACT</Button>
+    // <Button size='tiny'>CONTACT</Button>
+    <View><Text>Active</Text></View>
   )
   
   const renderItemIcon = (props) => (
-      <Icon
-        {...props}
-        name='person'
-      />
+    <Icon
+      {...props}
+      name='person'
+    />
   )
   
   const renderItem = ({ item, index }) => (
-      <ListItem
-          title={`${item.name}`}
-          description={`${item.address} ${index + 1}`}
-          accessoryLeft={renderItemIcon}
-          // accessoryRight={renderItemAccessory}
-      />
+    <ListItem
+      title={`${item.firstname} ${item.lastname}`}
+      description={`${item.address}`}
+      accessoryLeft={renderItemIcon}
+      accessoryRight={renderItemAccessory}
+    />
   );
 
   return (

@@ -7,6 +7,7 @@
   "roboflowDetectionApiUrl": "https://detect.roboflow.com/newmodel-bbv0n/1",
   "roboflowDetectionApiKey": "3iQpfaxq8Qx8uiNfK5D1",
   "localDBsecret": "signlingua:pm2SITMZ3j",
+  "webBaseUrl": "https://darkseagreen-nightingale-164077.hostingersite.com/",
   "webApiUrl": "https://darkseagreen-nightingale-164077.hostingersite.com/api/",
   "webAdminUrl":"https://darkseagreen-nightingale-164077.hostingersite.com/admin/"
 }

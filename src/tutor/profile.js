@@ -21,7 +21,6 @@ const TutorProfileScreen = () => {
     }, [])
 
     const handleSubmit = async (payload, files) => {
-        console.log(payload)
         let result = await PostFormApiCall('/profile.php', payload, files)
         if(result?.status == 200){
             HELPERS.getAccountData(setProfileData)

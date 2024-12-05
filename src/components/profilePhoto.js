@@ -4,6 +4,7 @@ import {  Text } from "@ui-kitten/components";
 import { useNavigation } from "@react-navigation/native";
 import { MenuItem, OverflowMenu } from '@ui-kitten/components';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import HELPERS from "../utils/helpers";
 
 const defaultProfilePhoto = require("../assets/images/default-avatar.jpg")
 
@@ -14,7 +15,13 @@ const ProfilePhoto = ({photo, setPhoto}) => {
   const [profilePhoto, setProfilePhoto] = useState(null)
 
   useEffect(() => {
-    if(profilePhoto) setProfilePhoto(photo)
+    if(photo) {
+      if(typeof photo === 'string'){
+        setProfilePhoto({uri: HELPERS.getUploadedFile(photo)})
+      }else{
+        setProfilePhoto(photo)
+      }      
+    }
   }, [photo])
 
   const onSelectTakePhoto = async () => {

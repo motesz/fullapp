@@ -50,9 +50,14 @@ const TutorRegisterForm = ({onSubmit}) => {
             age,
             gender,
             address,
-            contact,
-            resume
-        })
+            contact,            
+        }, [{
+            name: 'resume',
+            data: {
+                ...resume,
+                fileName: resume?.name
+            }
+        }])
     }
 
     return (

@@ -7,6 +7,7 @@ import {
   roboflowDetectionApiKey,
   webApiUrl
 } from '../../app.json';
+import RNFetchBlob from "rn-fetch-blob";
 
 export const postDetect = async (snap, callback, onError) => {
 
@@ -71,7 +72,6 @@ export const fetchWords = async (input) => {
 export const PostApiCall = async (url, payload) => {
 
   const res = await axios.postForm(webApiUrl + url, payload)
-  // console.log(res.data)
   if(res?.data) return res?.data
 
   return null
@@ -79,17 +79,16 @@ export const PostApiCall = async (url, payload) => {
 
 export const GetApiCall = async (url) => {
   const res = await axios.get(webApiUrl + url, {})
-  console.log(res.data)
   if(res?.data) return res?.data
 
   return null
 }
 
-export const PostFormApiCall = async (url, payload, files = []) => {
+export const PostFormApiCallx = async (url, payload, files = []) => {
   var data = new FormData();
 
   files.forEach((file) => {
-    data.append(file.name,file.data);
+    data.append(file.name, file.data, "image.png");
   })
   
   Object.keys(payload).forEach((key) => {
@@ -105,4 +104,26 @@ export const PostFormApiCall = async (url, payload, files = []) => {
   })
 
   console.log("RESULT: ", res?.data)
+}
+
+export const PostFormApiCall = async (url, payload, files = []) => {
+
+  let body = []
+
+  files.forEach((file) => {
+    const {fileName, type, uri} = file.data
+    body.push({name: file.name, filename: fileName, type: type, data: RNFetchBlob.wrap(uri) })
+  })
+  
+  Object.keys(payload).forEach((key) => {
+    body.push({name: key, data: payload[key]})
+  })
+
+  const result = await RNFetchBlob.fetch('POST', webApiUrl + url, {
+    'Content-Type': 'multipart/form-data'
+  }, body)
+
+  console.log("REQUEST BODY", body)
+
+  return result?.data
 }

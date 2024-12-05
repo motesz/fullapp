@@ -1,11 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import { Dimensions, StyleSheet, View } from 'react-native';
+import { Dimensions, StyleSheet, View, Image } from 'react-native';
 import { Avatar, Button, Card, Modal, Text } from '@ui-kitten/components';
+import HELPERS from '../utils/helpers';
 
 
 const defaultProfilePhoto = require("../assets/images/default-avatar.jpg")
 
-const TutorProfileModal = ({show, setShow, data}) => {
+const TutorProfileModal = ({show, setShow, data, onSubmit}) => {
 
   const [visible, setVisible] = useState(false)
   const [details, setDetails] = useState(data)
@@ -23,6 +24,12 @@ const TutorProfileModal = ({show, setShow, data}) => {
     setShow(false)
   }
 
+  const handleOnHire = () => {
+    setVisible(false)
+    setShow(false)
+    onSubmit(data)
+  }
+
   return (
     <View style={styles.container}>
 
@@ -38,7 +45,10 @@ const TutorProfileModal = ({show, setShow, data}) => {
           </View>
           <View style={{flexDirection: 'row', marginBottom: 30}}>
             <View style={{flex: 1, justifyContent: 'center'}}>
-              <Avatar size='giant' source={defaultProfilePhoto} />
+              {details?.profile_photo == '' && <Avatar size='giant' source={defaultProfilePhoto} />}
+              {details?.profile_photo != '' && 
+                <Image source={{uri: HELPERS.getUploadedFile(details.profile_photo)}} style={{width: 60, height: 60, borderRadius: 30, marginRight: 10}} />
+              }
             </View>
             <View style={{flex: 1}}></View>
             <View style={{flex: 9, marginLeft: 16}}>
@@ -59,9 +69,7 @@ const TutorProfileModal = ({show, setShow, data}) => {
               </Text>
             </View>
           </View>
-
-          
-          <Button appearance='filled' onPress={handleOnClose}>
+          <Button appearance='filled' onPress={handleOnHire}>
             HIRE TUTOR
           </Button>
           <Button appearance='ghost' onPress={handleOnClose}>

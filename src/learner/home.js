@@ -6,6 +6,8 @@ import SearchBar from "../components/search";
 import ListTutors from "../components/list/tutors";
 import TutorProfileModal from "../components/tutorprofilemodal";
 import HELPERS from "../utils/helpers";
+import { PostApiCall } from "../utils/api";
+import SESSION from "../utils/session";
 
 const LearnerHomeScreen = () => {
 
@@ -14,12 +16,23 @@ const LearnerHomeScreen = () => {
     const [selectedTutorData, setSelectedTutorData] = useState(null)
 
     useEffect(() => {
-        HELPERS.getTutors(setTutors)
+        HELPERS.getTutorsExceptHired(setTutors)
     }, [])
 
     const onSelect = (data) => {
         setShowModal(true)
         setSelectedTutorData(data)
+    }
+
+    const onHire = async (tutorData) => {
+
+        const learnerData = await SESSION.get_current_user_id('user')
+        const payload = {learner_id: learnerData?.id, tutor_id: tutorData?.id}
+        let result = await PostApiCall('/hire.php', payload)
+
+        if(result?.status == 200){
+
+        }
     }
 
     return (
@@ -37,7 +50,12 @@ const LearnerHomeScreen = () => {
                 <ListTutors payload={tutors} accessoryRight={true} onPressAccessoryRight={onSelect} />
             </View>
 
-            <TutorProfileModal show={showModal} setShow={setShowModal} data={selectedTutorData} />
+            <TutorProfileModal 
+                show={showModal} 
+                setShow={setShowModal} 
+                data={selectedTutorData} 
+                onSubmit={onHire}
+            />
 
         </View>
     )

@@ -7,7 +7,7 @@ import { Button, Input, Icon, Select, SelectItem } from '@ui-kitten/components';
 
 import TutorRegisterForm from "./components/forms/tutor";
 import LearnerRegisterForm from "./components/forms/learner";
-import { PostApiCall } from "./utils/api";
+import { PostFormApiCall } from "./utils/api";
 
 const tutorImage = require("./assets/images/teacher.png")
 const learnerImage = require("./assets/images/students.png")
@@ -19,22 +19,21 @@ const RegisterScreen = () => {
     const [error, setError] = useState(false)
     const [userType, setUserType] = useState('')
 
-    const handleOnSubmit = async (payload) => {
+    const handleOnSubmit = async (payload, files) => {
         
         let postdata = {
             ...payload, 
             firstname: payload.fname, 
             lastname: payload.lname, 
-            user_type: userType == 'tutor' ? 1 : 2
+            user_type: userType == 'tutor' ? '1' : '2'
         }
 
-        const result = await PostApiCall('/register.php', postdata)
+        const result = await PostFormApiCall('/register.php', postdata, files)
+        console.log(result)
         if(result.status == 500){
             setError(true)
         }else{
-            if(result?.data){
-                navigation.navigate('Login')
-            }
+            navigation.navigate('Login')
         }
 
         //FOR TESTING
