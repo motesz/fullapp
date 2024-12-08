@@ -35,7 +35,7 @@ const LoginScreen = () => {
             }
         }
         console.log("SESSION CHECK RUNNING", session)
-    }, [])
+    }, [session])
 
     const checkpoint = async () => {
         let _session = await SESSION.get("user")

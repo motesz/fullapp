@@ -5,14 +5,19 @@ import HELPERS from "../../utils/helpers";
 
 const defaultProfilePhoto = require("../../assets/images/default-avatar.jpg")
 
-const ListTutors = ({payload, accessoryRight = false, onPressAccessoryRight}) => {
+const ListTutors = ({payload, accessoryRight = false, onPressAccessoryRight, maxHeight}) => {
 
   const [data, setData] = useState([])
+  const [_maxHeight, setMaxHeight] = useState(250)
 
   useEffect(() => {
     if(payload) setData(payload)
       console.log(payload)
   }, [payload])
+
+  useEffect(() => {
+    setMaxHeight(maxHeight)
+  }, [maxHeight])
   
   const renderItemAccessory = ({data}) => (
     <Button onPress={() => onPressAccessoryRight ? onPressAccessoryRight(data) : null} size='tiny'>VIEW PROFILE</Button>
@@ -54,7 +59,7 @@ const ListTutors = ({payload, accessoryRight = false, onPressAccessoryRight}) =>
   if(accessoryRight === true){
     return (
       <List
-        style={styles.container}
+        style={{maxHeight: _maxHeight}}
         data={data}
         renderItem={renderItemWithRightOptions}
         maxToRenderPerBatch={10}

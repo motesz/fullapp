@@ -29,7 +29,7 @@ const TutorHomeScreen = () => {
     return (
         <View style={{flex: 1, backgroundColor: '#fff', padding: 20}}>
 
-            <SearchBar />
+            {/* <SearchBar /> */}
 
             <View style={{marginTop: 20, marginBottom: 10}}>
                 <View style={{flexDirection: 'row', backgroundColor: '#FF7043', borderRadius: 15, marginBottom: 4}}>

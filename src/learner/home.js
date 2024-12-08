@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FlatList, Image, View, StyleSheet } from "react-native";
+import { FlatList, Image, View, StyleSheet, Dimensions } from "react-native";
 import { Text, List, ListItem, Icon, Button, Input } from "@ui-kitten/components";
 
 import SearchBar from "../components/search";
@@ -15,10 +15,15 @@ const LearnerHomeScreen = () => {
     const [showModal, setShowModal] = useState(false)
     const [loading, setLoading] = useState(false)
     const [tutors, setTutors] = useState([])
+    const [searchQuery, setSearchQuery] = useState([])
+    const [searchValue, setSearchValue] = useState('')
     const [selectedTutorData, setSelectedTutorData] = useState(null)
 
     useEffect(() => {
-        HELPERS.getTutorsExceptHired(setTutors)
+        HELPERS.getTutorsExceptHired((result) => {
+            setTutors(result)
+            setSearchQuery(result)
+        })
     }, [])
 
     const onSelect = (data) => {
@@ -59,7 +64,13 @@ const LearnerHomeScreen = () => {
     return (
         <View style={{flex: 1, backgroundColor: '#fff', padding: 20}}>
 
-            <SearchBar />
+            <SearchBar 
+                payload={searchQuery} 
+                list={tutors} 
+                value={searchValue}
+                onChange={setSearchValue}
+                onSearch={setSearchQuery} 
+            />
 
             <View style={{marginTop: 20, marginBottom: 10}}>
                 <View style={{flexDirection: 'row', backgroundColor: '#FF7043', borderRadius: 15, marginBottom: 4}}>
@@ -68,7 +79,12 @@ const LearnerHomeScreen = () => {
                     </View>
                     <Image source={require("../assets/images/teacher.png")} style={{width: 150, height: 75, resizeMode: 'contain'}} />                    
                 </View>
-                <ListTutors payload={tutors} accessoryRight={true} onPressAccessoryRight={onSelect} />
+                <ListTutors 
+                    payload={searchValue != "" ? searchQuery : tutors} 
+                    accessoryRight={true} 
+                    onPressAccessoryRight={onSelect} 
+                    maxHeight={Dimensions.get('screen').height - 300}
+                />
             </View>
 
             <TutorProfileModal 
