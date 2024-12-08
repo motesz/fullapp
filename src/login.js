@@ -9,6 +9,7 @@ import PasswordInput from "./components/passwordInput";
 import SESSION from "./utils/session";
 import { PostApiCall } from "./utils/api";
 import ALERTS from "./utils/alert";
+import VALIDATOR from "./utils/validator";
 
 const LoginScreen = () => {
 
@@ -43,7 +44,15 @@ const LoginScreen = () => {
 
     const handleSubmit = async () => {
         setLoading(true)
-        const result = await PostApiCall('/login.php', {username, password})
+        let payload = {username, password}
+        let validation = VALIDATOR.checkForEmptyValues(payload)
+
+        if(validation.length > 0){
+            setLoading(false)
+            return
+        }
+
+        const result = await PostApiCall('/login.php', payload)
         if(result.status == 500){
             setError(true)
             setLoading(false)

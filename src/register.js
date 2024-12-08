@@ -34,9 +34,16 @@ const RegisterScreen = () => {
 
         const result = await PostFormApiCall('/register.php', postdata, files)
         console.log(result)
-        if(result.status == 500){
+        if(result?.status == 500){
             setError(true)
             setLoading(false)
+            if(result?.message){
+                ALERTS.message(
+                    "Account Registration", 
+                    result?.message, 
+                    [{ type: 'OK' }]
+                )
+            }
         }else{
             setLoading(false)
             ALERTS.message(

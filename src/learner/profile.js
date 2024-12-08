@@ -7,6 +7,7 @@ import SESSION from "../utils/session";
 import LearnerUpdateForm from "../components/forms/updatelearner";
 import HELPERS from "../utils/helpers";
 import { PostFormApiCall } from "../utils/api";
+import ALERTS from "../utils/alert";
 
 
 const LearnerProfileScreen = () => {
@@ -24,9 +25,10 @@ const LearnerProfileScreen = () => {
     const handleSubmit = async (payload, files) => {
         setLoading(true)
         let result = await PostFormApiCall('/profile.php', payload, files)
-        if(result?.status == 200){            
+        if(result?.status == 200){
             HELPERS.getLearnerAccountData(setProfileData)
             setLoading(false)
+            ALERTS.message("Update Profile", result?.message, [{type: "OK"}])
         }else{
             setLoading(false)
         }

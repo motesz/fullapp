@@ -29,6 +29,7 @@ const TutorProfileScreen = () => {
         if(result?.status == 200){            
             HELPERS.getAccountData(setProfileData)
             setLoading(false)
+            ALERTS.message("Update Profile", result?.message, [{type: "OK"}])
         }else{
             setLoading(false)
         }

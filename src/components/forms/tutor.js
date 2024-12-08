@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { View, TouchableWithoutFeedback, ScrollView } from "react-native";
+import { View, TouchableWithoutFeedback, ScrollView, Alert } from "react-native";
 import { IndexPath, Text } from "@ui-kitten/components";
 import { useNavigation } from "@react-navigation/native";
 import { Button, Input, Icon, Select, SelectItem, Spinner } from '@ui-kitten/components';
 import { pick } from "react-native-document-picker";
 import PasswordInput from "../passwordInput";
 import ALERTS from "../../utils/alert";
+import VALIDATOR from "../../utils/validator";
 
 const GENDERS = ["Male", "Female"]
 
@@ -48,7 +49,8 @@ const TutorRegisterForm = ({onSubmit, loading}) => {
     }
 
     const handleSubmit = () => {
-        onSubmit({
+
+        let payload = {
             fname,
             lname,
             email,
@@ -57,13 +59,39 @@ const TutorRegisterForm = ({onSubmit, loading}) => {
             gender,
             address,
             contact,            
-        }, [{
-            name: 'resume',
-            data: {
-                ...resume,
-                fileName: resume?.name
-            }
-        }])
+        }
+
+        let emptyVals = VALIDATOR.checkForEmptyValues(payload)
+        if(emptyVals.length > 0){
+            ALERTS.message(
+                "Form Validation", 
+                "Fields cannot be empty:\n\n" + emptyVals.map((val) => val?.field).join("\n"), 
+                [{type: "OK"}]
+            )
+            return
+        }
+
+        let contactVal = VALIDATOR.phoneNumber(contact)
+        if(!contactVal){
+            ALERTS.message("Form Validation", "Invalid contact number.", [{type: "OK"}])
+            return
+        }
+
+        let emailVal = VALIDATOR.email(email)
+        if(!emailVal){
+            ALERTS.message("Form Validation", "Invalid email address.", [{type: "OK"}])
+            return
+        }
+
+        let pwdVal = VALIDATOR.password(password)
+        if(!pwdVal){
+            ALERTS.message("Form Validation", "Password must be 6 or more characters", [{type: "OK"}])
+            return
+        }
+
+        let files = VALIDATOR.file(resume?.name ? [{...resume, attributeName: 'resume'}] : null)
+
+        onSubmit(payload, files)
     }
 
     return (

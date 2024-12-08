@@ -8,6 +8,7 @@ import ProfilePhoto from "../profilePhoto";
 import PasswordInput from "../passwordInput";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import ALERTS from "../../utils/alert";
+import VALIDATOR from "../../utils/validator";
 
 const GENDERS = ["Male", "Female"]
 
@@ -64,12 +65,27 @@ const TutorUpdateForm = ({data, loading, onSubmit}) => {
             address,
             contact,
         }
-        let files = [
-            {
-                name: 'profile_photo',
-                data: profilePhoto
-            }
-        ]
+
+        let contactVal = VALIDATOR.phoneNumber(contact)
+        if(!contactVal){
+            ALERTS.message("Form Validation", "Invalid contact number.", [{type: "OK"}])
+            return
+        }
+
+        let emailVal = VALIDATOR.email(email)
+        if(!emailVal){
+            ALERTS.message("Form Validation", "Invalid email address.", [{type: "OK"}])
+            return
+        }
+
+        let pwdVal = VALIDATOR.password(password)
+        if(!pwdVal){
+            ALERTS.message("Form Validation", "Password must be 6 or more characters", [{type: "OK"}])
+            return
+        }
+
+        let files = VALIDATOR.file(profilePhoto?.name ? [{...profilePhoto, attributeName: 'profile_photo'}] : null)
+        
         onSubmit(payload, files)
     }
 

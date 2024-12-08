@@ -125,5 +125,6 @@ export const PostFormApiCall = async (url, payload, files = []) => {
 
   console.log("REQUEST BODY", body)
 
-  return result?.data
+  const resultData = result?.data
+  return JSON.parse(resultData)
 }
