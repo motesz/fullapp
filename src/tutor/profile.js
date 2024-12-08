@@ -14,16 +14,23 @@ const TutorProfileScreen = () => {
     const navigation = useNavigation();
     const [accountStatus, setAccountStatus] = useState('active')
     const [profileData, setProfileData] = useState(null)
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
+        setLoading(true)
         HELPERS.getAccountStatus(setAccountStatus)
         HELPERS.getAccountData(setProfileData)
+        setLoading(false)
     }, [])
 
     const handleSubmit = async (payload, files) => {
+        setLoading(true)
         let result = await PostFormApiCall('/profile.php', payload, files)
-        if(result?.status == 200){
+        if(result?.status == 200){            
             HELPERS.getAccountData(setProfileData)
+            setLoading(false)
+        }else{
+            setLoading(false)
         }
     }
 
@@ -54,6 +61,7 @@ const TutorProfileScreen = () => {
 
             <TutorUpdateForm 
                 data={profileData} 
+                loading={loading}
                 onSubmit={handleSubmit}
             />
             

@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { FlatList, Image, View, StyleSheet } from "react-native";
 import { Text, List, ListItem, Icon, Button, Input } from "@ui-kitten/components";
+import HELPERS from "../../utils/helpers";
+
+const defaultProfilePhoto = require("../../assets/images/default-avatar.jpg")
 
 const ListTutors = ({payload, accessoryRight = false, onPressAccessoryRight}) => {
 
@@ -21,12 +24,21 @@ const ListTutors = ({payload, accessoryRight = false, onPressAccessoryRight}) =>
       name='person'
     />
   )
+
+  const renderProfileAvatar = ({uri}) => {
+    if(uri){
+      return <Image source={{uri: HELPERS.getUploadedFile(uri)}} style={{width: 45, height: 45, borderRadius: 45 / 2}} />
+    }
+    if(!uri){
+      return <Image source={defaultProfilePhoto} style={{width: 45, height: 45, borderRadius: 45 / 2}} />
+    }
+  }
   
   const renderItem = ({ item, index }) => (
       <ListItem
           title={`${item.firstname} ${item.lastname}`}
           description={`${item.address} ${index + 1}`}
-          accessoryLeft={renderItemIcon}
+          accessoryLeft={() => renderProfileAvatar({uri: item.profile_photo})}
       />
   );
 
@@ -34,7 +46,7 @@ const ListTutors = ({payload, accessoryRight = false, onPressAccessoryRight}) =>
     <ListItem
       title={`${item.firstname} ${item.lastname}`}
       description={`${item.address} ${index + 1}`}
-      accessoryLeft={renderItemIcon}
+      accessoryLeft={() => renderProfileAvatar({uri: item.profile_photo})}
       accessoryRight={() => renderItemAccessory({data: item})}
     />
   );

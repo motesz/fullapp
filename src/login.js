@@ -8,6 +8,7 @@ import PasswordInput from "./components/passwordInput";
 
 import SESSION from "./utils/session";
 import { PostApiCall } from "./utils/api";
+import ALERTS from "./utils/alert";
 
 const LoginScreen = () => {
 
@@ -17,6 +18,7 @@ const LoginScreen = () => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState(false)
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
         checkpoint()
@@ -40,14 +42,16 @@ const LoginScreen = () => {
     }
 
     const handleSubmit = async () => {
-       
+        setLoading(true)
         const result = await PostApiCall('/login.php', {username, password})
         if(result.status == 500){
             setError(true)
+            setLoading(false)
         }else{
             if(result?.data){
                 let user = await SESSION.set("user", result?.data)
                 if(user){
+                    setLoading(false)
                     console.log(user)
                     if(user?.user_type == 1) navigation.navigate("Tutor")
                     else if(user?.user_type == 2) navigation.navigate("Learner")
@@ -58,6 +62,9 @@ const LoginScreen = () => {
 
     return (
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+            
+            {<ALERTS.loading isLoading={loading} />}
+
             <Text style="">Sign In</Text>
             <View style={{height: 80}}></View>
             <Input
@@ -71,7 +78,7 @@ const LoginScreen = () => {
             />
             <PasswordInput value={password} setValue={setPassword} />
             {error && <View style={{height: 20}}>
-                <Text>Invalid username or password</Text>
+                <Text style={{color: 'red'}}>Invalid username or password</Text>
             </View>}
             <Button onPress={handleSubmit} style={{paddingVertical: 16, marginTop: 16, width: '50%'}}>
                 SIGN IN

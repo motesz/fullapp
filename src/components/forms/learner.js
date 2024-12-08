@@ -4,10 +4,11 @@ import { IndexPath, Text } from "@ui-kitten/components";
 import { useNavigation } from "@react-navigation/native";
 import { Button, Input, Icon, Select, SelectItem } from '@ui-kitten/components';
 import PasswordInput from "../passwordInput";
+import ALERTS from "../../utils/alert";
 
 const GENDERS = ["Male", "Female"]
 
-const LearnerRegisterForm = ({onSubmit}) => {
+const LearnerRegisterForm = ({onSubmit, loading}) => {
 
     const navigation = useNavigation()
 
@@ -23,6 +24,11 @@ const LearnerRegisterForm = ({onSubmit}) => {
     const [userType, setUserType] = useState('')
 
     const [error, setError] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
+
+    useEffect(() => {
+        setIsLoading(loading)
+    }, [loading])
 
     const handleSubmit = () => {
         onSubmit({
@@ -39,6 +45,9 @@ const LearnerRegisterForm = ({onSubmit}) => {
 
     return (
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+
+            {<ALERTS.loading isLoading={isLoading} />}
+
             <Text style="">Sign Up as Learner</Text>
             <View style={{height: 80}}></View>
             <Input

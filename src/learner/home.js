@@ -8,10 +8,12 @@ import TutorProfileModal from "../components/tutorprofilemodal";
 import HELPERS from "../utils/helpers";
 import { PostApiCall } from "../utils/api";
 import SESSION from "../utils/session";
+import ALERTS from "../utils/alert";
 
 const LearnerHomeScreen = () => {
 
     const [showModal, setShowModal] = useState(false)
+    const [loading, setLoading] = useState(false)
     const [tutors, setTutors] = useState([])
     const [selectedTutorData, setSelectedTutorData] = useState(null)
 
@@ -26,12 +28,31 @@ const LearnerHomeScreen = () => {
 
     const onHire = async (tutorData) => {
 
+        setLoading(true)
         const learnerData = await SESSION.get_current_user_id('user')
         const payload = {learner_id: learnerData?.id, tutor_id: tutorData?.id}
         let result = await PostApiCall('/hire.php', payload)
 
         if(result?.status == 200){
-
+            setLoading(false)
+            ALERTS.message(
+                "Hire Tutor",
+                "Tutor hired successfully!",
+                [{
+                    type: "OK",
+                    onPress: () => setLoading(false)
+                }]
+            )
+        }else{
+            setLoading(false)
+            ALERTS.message(
+                "Hire Tutor",
+                "Unable to process hiring. Please try again later.",
+                [{
+                    type: "OK",
+                    onPress: () => setLoading(false)
+                }]
+            )
         }
     }
 
@@ -55,6 +76,7 @@ const LearnerHomeScreen = () => {
                 setShow={setShowModal} 
                 data={selectedTutorData} 
                 onSubmit={onHire}
+                loading={loading}
             />
 
         </View>

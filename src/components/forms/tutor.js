@@ -5,10 +5,11 @@ import { useNavigation } from "@react-navigation/native";
 import { Button, Input, Icon, Select, SelectItem, Spinner } from '@ui-kitten/components';
 import { pick } from "react-native-document-picker";
 import PasswordInput from "../passwordInput";
+import ALERTS from "../../utils/alert";
 
 const GENDERS = ["Male", "Female"]
 
-const TutorRegisterForm = ({onSubmit}) => {
+const TutorRegisterForm = ({onSubmit, loading}) => {
 
     const navigation = useNavigation()
 
@@ -27,6 +28,11 @@ const TutorRegisterForm = ({onSubmit}) => {
     const [resumeUploading, setResumeUploading] = useState(false)
 
     const [error, setError] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
+
+    useEffect(() => {
+        setIsLoading(loading)
+    }, [loading])
 
     const handlePickFile = async () => {
         try {
@@ -62,6 +68,9 @@ const TutorRegisterForm = ({onSubmit}) => {
 
     return (
         <ScrollView contentContainerStyle={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+
+            {<ALERTS.loading isLoading={isLoading} />}
+
             <View style={{height: 40}}></View>
             <Text style="">Sign Up as Tutor</Text>
             <View style={{height: 40}}></View>

@@ -8,6 +8,7 @@ import { Button, Input, Icon, Select, SelectItem } from '@ui-kitten/components';
 import TutorRegisterForm from "./components/forms/tutor";
 import LearnerRegisterForm from "./components/forms/learner";
 import { PostFormApiCall } from "./utils/api";
+import ALERTS from "./utils/alert";
 
 const tutorImage = require("./assets/images/teacher.png")
 const learnerImage = require("./assets/images/students.png")
@@ -17,10 +18,13 @@ const RegisterScreen = () => {
     const navigation = useNavigation()
 
     const [error, setError] = useState(false)
+    const [loading, setLoading] = useState(false)
     const [userType, setUserType] = useState('')
 
     const handleOnSubmit = async (payload, files) => {
         
+        setLoading(true)
+
         let postdata = {
             ...payload, 
             firstname: payload.fname, 
@@ -32,8 +36,17 @@ const RegisterScreen = () => {
         console.log(result)
         if(result.status == 500){
             setError(true)
+            setLoading(false)
         }else{
-            navigation.navigate('Login')
+            setLoading(false)
+            ALERTS.message(
+                "Account Registration", 
+                "Registered successfully! You can now login to continue", 
+                [{
+                    type: 'OK',
+                    onPress: () => navigation.navigate('Login')
+                }]
+            )
         }
 
         //FOR TESTING
@@ -59,11 +72,11 @@ const RegisterScreen = () => {
     }
 
     if(userType == 'tutor'){
-        return <TutorRegisterForm onSubmit={handleOnSubmit} />
+        return <TutorRegisterForm onSubmit={handleOnSubmit} loading={loading} />
     }
 
     if(userType == 'learner'){
-        return <LearnerRegisterForm onSubmit={handleOnSubmit} />
+        return <LearnerRegisterForm onSubmit={handleOnSubmit} loading={loading} />
     }
 
     return (

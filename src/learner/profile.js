@@ -13,15 +13,22 @@ const LearnerProfileScreen = () => {
 
     const navigation = useNavigation();
     const [profileData, setProfileData] = useState(null)
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
+        setLoading(true)
         HELPERS.getLearnerAccountData(setProfileData)
+        setLoading(false)
     }, [])
 
     const handleSubmit = async (payload, files) => {
+        setLoading(true)
         let result = await PostFormApiCall('/profile.php', payload, files)
-        if(result?.status == 200){
+        if(result?.status == 200){            
             HELPERS.getLearnerAccountData(setProfileData)
+            setLoading(false)
+        }else{
+            setLoading(false)
         }
     }
 
@@ -48,6 +55,7 @@ const LearnerProfileScreen = () => {
 
             <LearnerUpdateForm 
                 data={profileData} 
+                loading={loading}
                 onSubmit={handleSubmit}
             />
             

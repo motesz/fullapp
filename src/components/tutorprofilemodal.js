@@ -2,14 +2,16 @@ import React, {useState, useEffect} from 'react';
 import { Dimensions, StyleSheet, View, Image } from 'react-native';
 import { Avatar, Button, Card, Modal, Text } from '@ui-kitten/components';
 import HELPERS from '../utils/helpers';
+import ALERTS from '../utils/alert';
 
 
 const defaultProfilePhoto = require("../assets/images/default-avatar.jpg")
 
-const TutorProfileModal = ({show, setShow, data, onSubmit}) => {
+const TutorProfileModal = ({show, setShow, data, onSubmit, loading}) => {
 
   const [visible, setVisible] = useState(false)
   const [details, setDetails] = useState(data)
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     setVisible(show)
@@ -18,6 +20,10 @@ const TutorProfileModal = ({show, setShow, data, onSubmit}) => {
   useEffect(() => {
     if(data) setDetails(data)
   }, [data])
+
+  useEffect(() => {
+    setIsLoading(loading)
+  }, [loading])
 
   const handleOnClose = () => {
     setVisible(false)
@@ -33,6 +39,8 @@ const TutorProfileModal = ({show, setShow, data, onSubmit}) => {
   return (
     <View style={styles.container}>
 
+      {<ALERTS.loading isLoading={isLoading} />}
+
       <Modal
         visible={visible}
         backdropStyle={styles.backdrop}
@@ -45,8 +53,8 @@ const TutorProfileModal = ({show, setShow, data, onSubmit}) => {
           </View>
           <View style={{flexDirection: 'row', marginBottom: 30}}>
             <View style={{flex: 1, justifyContent: 'center'}}>
-              {details?.profile_photo == '' && <Avatar size='giant' source={defaultProfilePhoto} />}
-              {details?.profile_photo != '' && 
+              {details?.profile_photo && details?.profile_photo == '' && <Avatar size='giant' source={defaultProfilePhoto} />}
+              {details?.profile_photo && details?.profile_photo != '' && 
                 <Image source={{uri: HELPERS.getUploadedFile(details.profile_photo)}} style={{width: 60, height: 60, borderRadius: 30, marginRight: 10}} />
               }
             </View>

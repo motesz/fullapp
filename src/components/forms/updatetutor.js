@@ -7,10 +7,11 @@ import { Button, Input, Icon, Select, SelectItem, Spinner } from '@ui-kitten/com
 import ProfilePhoto from "../profilePhoto";
 import PasswordInput from "../passwordInput";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import ALERTS from "../../utils/alert";
 
 const GENDERS = ["Male", "Female"]
 
-const TutorUpdateForm = ({data, onSubmit}) => {
+const TutorUpdateForm = ({data, loading, onSubmit}) => {
 
     const navigation = useNavigation()
 
@@ -33,6 +34,11 @@ const TutorUpdateForm = ({data, onSubmit}) => {
 
     const [secureTextEntry, setSecureTextEntry] = useState(true)
     const [error, setError] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
+
+    useEffect(() => {
+        setIsLoading(loading)
+    }, [loading])
 
     useEffect(() => {
         setFname(data?.firstname)
@@ -70,6 +76,9 @@ const TutorUpdateForm = ({data, onSubmit}) => {
     return (
         <SafeAreaProvider>
         <SafeAreaView style={{flex: 1}}>
+
+            {<ALERTS.loading isLoading={isLoading} />}
+
         <ScrollView contentContainerStyle={{flex: 1, alignItems: 'center', justifyContent: 'flex-start'}}>
             
             <ProfilePhoto photo={profilePhoto} setPhoto={setProfilePhoto} />
