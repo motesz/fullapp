@@ -79,7 +79,7 @@ const ListTutors = ({payload, accessoryRight = false, onPressAccessoryRight, max
 
 const styles = StyleSheet.create({
   container: {
-    maxHeight: 250,
+    maxHeight: 700,
   }
 })
 

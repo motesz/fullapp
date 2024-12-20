@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FlatList, Image, View, StyleSheet } from "react-native";
+import { FlatList, Image, View, StyleSheet, Dimensions } from "react-native";
 import { Text, List, ListItem, Icon, Button, Input } from "@ui-kitten/components";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
@@ -38,7 +38,9 @@ const TutorHomeScreen = () => {
                     </View>
                     <Image source={require("../assets/images/teacher.png")} style={{width: 150, height: 75, resizeMode: 'contain'}} />                    
                 </View>
-                <ListTutors payload={tutors} />
+                <ListTutors payload={tutors}
+                                     
+                />
             </View>
 
         </View>
